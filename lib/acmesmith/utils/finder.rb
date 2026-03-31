@@ -14,17 +14,15 @@ module Acmesmith
             begin
               require "#{prefix}/#{name}"
             rescue LoadError
+              raise NotFound, "Couldn't find #{name.inspect} for #{const}" if error
+              return nil
             end
 
             retried = true
             retry
           end
 
-          if error
-            raise NotFound, "Couldn't find #{name.inspect} for #{const}"
-          else
-            nil
-          end
+          raise NotFound, "Couldn't find #{name.inspect} for #{const}" if error
         end
       end
     end
